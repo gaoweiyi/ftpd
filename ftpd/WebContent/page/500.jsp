@@ -1,0 +1,60 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+<META HTTP-EQUIV="expires" CONTENT="0">
+<script type="text/javascript" src="res/js/jquery-1.11.0.min.js"></script>
+<link href="res/css/w3.css" rel="stylesheet"/>
+<title>Insert title here</title>
+<style type="text/css">
+	#messageDiv{
+		display:none;
+	}
+</style>
+<script type="text/javascript">
+	var flag = 0;
+</script>
+</head>
+<body>
+	<div class="w3-container">
+		<h2>您好，我们为你抛出了一个异常</h2>
+	<h3>异常信息是：</h3>
+	<button id="showMessageButton" class="w3-button w3-border">显示</button>
+	&nbsp;&nbsp;
+	<button id="fixButton" class="w3-button w3-border">尝试修复</button>
+	若修复完页面未成功刷新，请<a href="javascript:;" id="re">点击这里</a>以从首页进入，一次不行多点几次即可
+	<div id="messageDiv">${message }</div>
+	<script type="text/javascript">
+		$("#showMessageButton").click(function(){
+			if(flag==0){
+				$(this).text("收起");
+				$("#messageDiv").show();
+				flag = 1;
+			}else{
+				$(this).text("显示");
+				$("#messageDiv").hide();
+				flag = 0;
+			}
+		});
+		$("#fixButton").click(function(){
+			location.href  = "genericController.do?smartFix";
+		});
+		$("#re").click(function(){
+			var hostName = location.host;
+			var projectName = "${pageContext.request.contextPath}";
+			location.href = "http://"+hostName+"/"+projectName;
+		});
+	</script>
+	
+	</div>
+	
+</body>
+</html>
