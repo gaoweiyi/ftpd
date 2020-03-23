@@ -8,7 +8,7 @@
 
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
-	String basePath = C.configs.get("basePath").toString();
+	String basePath = C.configCache.get("basePath").getObjectValue().toString();
 	pageContext.setAttribute("basePath",basePath);
 
 %>
@@ -39,7 +39,25 @@
 </head>
 <body>
 	<div id="header">
-		<h1>Index of ${mainPath }</h1>
+		<h1 id="title">Index of ${mainPath }</h1>
+		<script type="text/javascript">
+			var title = $("#title").text();
+			var path = title.substring("Index of ".length);
+			var singlePathArr = path.split("/");
+			var newPathDisplay = "";//显示到标题上的路径html代码，是一些超链接
+			var currentSinglePath = "";
+			var currentSinglePathHtml;
+			//if(singlePathArr[1].length!=0){//Windows系统下打开
+				$.each(singlePathArr,function(index,ele){
+					if(index==0)
+						return;
+					currentSinglePath+="/"+ele;
+					currentSinglePathHtml = "<a href='fnodeController.do?openDir&path="+encodeURIComponent(currentSinglePath.substring(1))+"' style='text-decoration:none'>"+"/"+ele+"</a>";
+					newPathDisplay+=currentSinglePathHtml;
+				})
+				$("#title").html("Index of "+newPathDisplay);
+		//	}//Windows系统下打开
+		</script>
 	</div>
 	<div id="container">
 		<table>
@@ -64,7 +82,6 @@
 			<c:forEach items="${fnodes }" var="fnode" varStatus="sta">
 				<%
 					String mainPathEncoded = URLEncoder.encode(((FNode)pageContext.getAttribute("fnode")).getMainPath(), "UTF-8");
-		
 					pageContext.setAttribute("mainPathEncoded", mainPathEncoded);
 				%>
 				<tr>
@@ -75,7 +92,10 @@
 								<a href="fnodeController.do?openDir&path=${mainPathEncoded}">${fnode.name}/</a>
 							</c:when>
 							<c:otherwise>
-								<a href="javascript:;" name="dlFileLink" onclick="dlFile('${mainPathEncoded }')">${fnode.name }</a>
+								<a id="${fnode.name }" href="javascript:;" name="dlFileLink" onclick="dlFile('${mainPathEncoded }')">${fnode.name }</a>
+								<script type="text/javascript">
+									$("#container [id='${fnode.name}']").attr('href',"fnodeController.do?dlFile&path="+'${mainPathEncoded }'.replace("+","%2B"));;
+								</script>
 							</c:otherwise>
 						</c:choose>
 						&nbsp;&nbsp;

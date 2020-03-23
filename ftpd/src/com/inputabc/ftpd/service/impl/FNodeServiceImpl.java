@@ -1,6 +1,7 @@
 package com.inputabc.ftpd.service.impl;
 
 import java.io.File;
+
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,7 +43,7 @@ public class FNodeServiceImpl implements FNodeService {
 				fnode.setMainPath(file.toString().replace("\\", "/").split(basePath)[1].replace("\\", "/"));
 				if(file.isDirectory()){
 					fnode.setType(1);
-					Boolean showDirSize = Boolean.valueOf(C.configs.get("showDirSize").toString().toLowerCase());
+					Boolean showDirSize = Boolean.valueOf(C.configCache.get("showDirSize").getObjectValue().toString().toLowerCase());
 					if(showDirSize){
 						Long size = forkJoinPool.invoke(new FileSizeFinder(file));
 						fnode.setSize(size);
@@ -188,9 +189,9 @@ public class FNodeServiceImpl implements FNodeService {
 			public int compare(FNode fnode1, FNode fnode2) {
 				String pinyin1 = PinYinUtils.hanziToPinyin(fnode1.getName(),"");
 				String pinyin2 = PinYinUtils.hanziToPinyin(fnode2.getName(),"");
-				if(sortByNameFlag){
+				if(sortByNameFlag){//正序
 					return StringUtils.compareIgnoreCase(pinyin1, pinyin2);
-				}else{
+				}else{//倒序
 					return -(StringUtils.compareIgnoreCase(pinyin1, pinyin2));
 				}
 			}	

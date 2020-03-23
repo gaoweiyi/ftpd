@@ -40,7 +40,7 @@ public class FNodeController {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		String basePath = C.configs.get("basePath").toString();
+		String basePath = C.configCache.get("basePath").getObjectValue().toString();
 		List<FNode> fnodes = fnodeService.listFiles(basePath.replace("\\", "/"), path.replace("\\", "/"),0,request.getSession());
 		ModelAndView mv = new ModelAndView();
 		ModelMap modelMap = mv.getModelMap();
@@ -59,7 +59,7 @@ public class FNodeController {
 	}
 	@RequestMapping(params = "backDir")
 	public ModelAndView backDir(HttpServletRequest request,HttpServletResponse response,String currentPath){
-		String basePath = C.configs.get("basePath").toString();
+		String basePath = C.configCache.get("basePath").getObjectValue().toString();
 		ModelAndView mv = new ModelAndView();
 		ModelMap modelMap = mv.getModelMap();
 		//为了保证程序的稳定性
@@ -100,10 +100,10 @@ public class FNodeController {
 			throw new RuntimeException(e);
 		}
 		
-		String basePath = C.configs.get("basePath").toString();
+		String basePath = C.configCache.get("basePath").getObjectValue().toString();
 		File file = new File(basePath,path);
 		String filename = new File(basePath,path).getName();
-		Boolean autoMimeType = Boolean.valueOf(C.configs.get("autoMimeType").toString().toLowerCase());
+		Boolean autoMimeType = Boolean.valueOf(C.configCache.get("autoMimeType").getObjectValue().toString().toLowerCase());
 		String contentDispositionMethod = "";
 		if(autoMimeType){
 			response.setContentType(request.getServletContext().getMimeType(filename));
@@ -135,7 +135,7 @@ public class FNodeController {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		String basePath = C.configs.get("basePath").toString();
+		String basePath = C.configCache.get("basePath").getObjectValue().toString();
 		List<FNode> fnodes = fnodeService.listFiles(basePath, path,sortMethod,request.getSession());
 		ModelAndView mv = new ModelAndView();
 		ModelMap modelMap = mv.getModelMap();
@@ -146,3 +146,4 @@ public class FNodeController {
 		return mv;
 	}
 }
+

@@ -310,3 +310,4 @@ public class PinYinUtils {
 		System.out.println(Arrays.toString(stringToPinyin(s3,true,",")));
 	}
 }
+
