@@ -33,7 +33,7 @@
 			var newPathDisplay = "";//显示到标题上的路径html代码，是一些超链接
 			var currentSinglePath = "";
 			var currentSinglePathHtml;
-			if(singlePathArr[1].length!=0){//Windows系统下打开
+			//if(singlePathArr[1].length!=0){//Windows系统下打开
 				$.each(singlePathArr,function(index,ele){
 					if(index==0)
 						return;
@@ -42,7 +42,7 @@
 					newPathDisplay+=currentSinglePathHtml;
 				})
 				$("#title").html("Index of "+newPathDisplay);
-			}//Windows系统下打开
+			//}//Windows系统下打开
 		</script>
 	</div>
 	<div id="container">
