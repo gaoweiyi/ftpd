@@ -54,6 +54,7 @@ public class FNodeController {
 			path = "/".concat(path);
 		}
 		modelMap.addAttribute("mainPath", path);
+		modelMap.addAttribute("basePath", basePath);
 		mv.setViewName("index");
 		return mv;
 	}

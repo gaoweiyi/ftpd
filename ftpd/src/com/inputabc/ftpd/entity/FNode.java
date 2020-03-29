@@ -12,6 +12,7 @@ public class FNode implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -4952449375517673271L;
+	private String id;
 	private String mainPath;//文件的主要路径，基于basePath而言
 	private String name;//文件名
 	private Long size;//文件大小
@@ -20,6 +21,13 @@ public class FNode implements Serializable {
 	private String imageName;//文件图片的文件名
 	private String displaySize;//字符串形式的文件大小
 	private Integer type;//0表示文件 1表示目录
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getMainPath() {
 		return mainPath;
 	}

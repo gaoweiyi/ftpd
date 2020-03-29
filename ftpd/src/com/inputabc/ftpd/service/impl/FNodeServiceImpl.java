@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.RecursiveTask;
@@ -58,6 +59,7 @@ public class FNodeServiceImpl implements FNodeService {
 					fnode.setDisplaySize(FileUtils.byteCountToDisplaySize(file.length()));
 					fnode.setImageName(getImageName(fnode.getEx()));
 				}
+				fnode.setId(UUID.randomUUID().toString().replace("-", ""));
 				fnodes.add(fnode);
 			}
 		} catch (NullPointerException e) {
