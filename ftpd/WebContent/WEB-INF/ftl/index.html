@@ -33,7 +33,7 @@
 			var newPathDisplay = "";//显示到标题上的路径html代码，是一些超链接
 			var currentSinglePath = "";
 			var currentSinglePathHtml;
-			//if(singlePathArr[1].length!=0){//Windows系统下打开
+			if(singlePathArr[1].length!=0){//Windows系统下打开
 				$.each(singlePathArr,function(index,ele){
 					if(index==0)
 						return;
@@ -42,28 +42,28 @@
 					newPathDisplay+=currentSinglePathHtml;
 				})
 				$("#title").html("Index of "+newPathDisplay);
-		//	}//Windows系统下打开
+			}//Windows系统下打开
 		</script>
 	</div>
 	<div id="container">
 		<table>
 			<tr>
-				<th><a href="fnodeController.do?reloadDir&isChildPath=${isChildPath }&sortMethod=1&path=${mainPath }">名称</a>&nbsp;&nbsp;</th>
-				<th><a href="fnodeController.do?reloadDir&isChildPath=${isChildPath }&sortMethod=2&path=${mainPath }">修改日期</a>&nbsp;&nbsp;</th>
-				<th><a href="fnodeController.do?reloadDir&isChildPath=${isChildPath }&sortMethod=3&path=${mainPath }">类型</a>&nbsp;&nbsp;</th>
-				<th><a href="fnodeController.do?reloadDir&isChildPath=${isChildPath }&sortMethod=4&path=${mainPath }">大小</a>&nbsp;&nbsp;</th>
+				<th><a href="fnodeController.do?reloadDir&isChildPath=${isChildPath?c }&sortMethod=1&path=${mainPath }">名称</a>&nbsp;&nbsp;</th>
+				<th><a href="fnodeController.do?reloadDir&isChildPath=${isChildPath?c }&sortMethod=2&path=${mainPath }">修改日期</a>&nbsp;&nbsp;</th>
+				<th><a href="fnodeController.do?reloadDir&isChildPath=${isChildPath?c }&sortMethod=3&path=${mainPath }">类型</a>&nbsp;&nbsp;</th>
+				<th><a href="fnodeController.do?reloadDir&isChildPath=${isChildPath?c }&sortMethod=4&path=${mainPath }">大小</a>&nbsp;&nbsp;</th>
 			</tr>
 			<tr>                         
 				<th colspan="4"><hr></th>
 			</tr>
-			<c:if test="${isChildPath }">
+			<#if isChildPath>
 				<tr>
 					<td colspan="4">
 						<img src="res/img/icon/back.gif"/>
 						<a href="fnodeController.do?backDir&currentPath=${mainPath }">返回上一页</a>
 					</td>
 				</tr>
-			</c:if>
+			</#if>
 			
 			<#list fnodes as fnode>
 				<#assign mainPathEncoded=fnode.mainPath?url>
@@ -113,7 +113,7 @@
 		<address>Your ip is ${remoteHost }</address>
 	</div>
 	<script type="text/javascript">
-		var basePath = "${basePath}";
+		var basePath = "${basePath!''}";
 		function dlFile(mainPath){
 			location.href = "fnodeController.do?dlFile&path="+mainPath.replace("+","%2B");
 		}

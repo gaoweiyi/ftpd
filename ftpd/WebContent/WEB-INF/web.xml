@@ -12,13 +12,14 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:config/spring/applicationContext-*.xml</param-value>
   </context-param>
+
   <listener>
     <listener-class>com.inputabc.ftpd.web.listener.AppInitializer</listener-class>
   </listener>
   <listener>
   	<listener-class>com.inputabc.ftpd.web.listener.UserRequestListener</listener-class>
   </listener>
-  <listener>
+    <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
   <filter>
@@ -45,10 +46,4 @@
     <servlet-name>springmvc</servlet-name>
     <url-pattern>*.do</url-pattern>
   </servlet-mapping>
-  <listener>
-    <listener-class>com.inputabc.ftpd.web.listener.AppInitListener</listener-class>
-  </listener>
-  <listener>
-    <listener-class>com.inputabc.ftpd.web.listener.UserRequestListener</listener-class>
-  </listener>
 </web-app>
