@@ -12,6 +12,7 @@ import net.sf.ehcache.CacheManager;
 public class C {
 	//public static final ConcurrentHashMap<String,Object> configs = new ConcurrentHashMap<String,Object>();
 	public static Cache configCache;
-	public static final String line = System.getProperty("line.separator");
+	public static Cache appCache;
+	public static final String LINE = System.getProperty("line.separator");
 }
 
