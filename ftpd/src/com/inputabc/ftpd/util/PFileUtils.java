@@ -18,9 +18,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 
 /**
- * @date 2018/1/3
+ * @date 2020/4/22
  * @author 高伟益
- * @version 1.3.1
+ * @version 1.3.2
  */
 
 
@@ -136,7 +136,19 @@ public class PFileUtils {
 		value.add(sizeType);
 		return value;
     }
-   
+    /**
+     * 获取不包含扩展名的文件名
+     * @param filename
+     * @param ex
+     * @return
+     */
+   public static String getMainName(String filename,String ex){
+	   String noExFilename = filename;
+		if (filename.contains(".")) {
+			noExFilename = filename.substring(0, filename.lastIndexOf("."));// 去除扩展名
+		}
+		return noExFilename;
+   }
 }
 
 

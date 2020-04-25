@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.Properties;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -25,7 +26,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.inputabc.ftpd.constant.C;
 import com.inputabc.ftpd.util.PFileUtils;
-
+/**
+ * 
+ * @author gaoweiyi
+ *
+ */
 @Controller
 @RequestMapping("genericController.do")
 public class GenericController {
@@ -50,6 +55,11 @@ public class GenericController {
 	@RequestMapping(params = "init")
 	public void init(HttpServletRequest request,HttpServletResponse response) throws IOException{
 		HttpSession session = request.getSession();
+		session.setMaxInactiveInterval(3600*24*7);
+		Cookie cookie = new Cookie("JSESSIONID",session.getId());
+		cookie.setPath("/");
+		cookie.setMaxAge(-1);
+		response.addCookie(cookie);
 		session.setAttribute("sortByNameFlag", false);
 		session.setAttribute("sortByModifiedFlag", false);
 		session.setAttribute("sortByTypeFlag", false);
@@ -57,6 +67,7 @@ public class GenericController {
 		response.setHeader("Pragma","No-cache");
 		response.setHeader("Cache-Control","no-cache"); 
 		response.setDateHeader("Expires", 0);
+		response.addCookie(cookie);
 		response.sendRedirect("fnodeController.do?openDir&path=/");
 	}
 	private void fixConfig() throws FileNotFoundException, IOException{
@@ -69,9 +80,8 @@ public class GenericController {
 				configFile.createNewFile();
 				IOUtils.write("#", new FileOutputStream(configFile), "UTF-8");
 				OutputStream configFileOutputStream = new BufferedOutputStream(new FileOutputStream(configFile));
-				IOUtils.write("basePath="+C.line,configFileOutputStream , "UTF-8");
-				IOUtils.write("showDirSize=false"+C.line,configFileOutputStream , "UTF-8");
-				IOUtils.write("autoMimeType=false"+C.line,configFileOutputStream , "UTF-8");
+				IOUtils.write("basePath="+C.LINE,configFileOutputStream , "UTF-8");
+				IOUtils.write("autoMimeType=false"+C.LINE,configFileOutputStream , "UTF-8");
 				configFileOutputStream.flush();
 				configFileOutputStream.close();
 			}

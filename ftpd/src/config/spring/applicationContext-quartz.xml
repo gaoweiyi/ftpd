@@ -16,13 +16,28 @@
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="jobDetail1"></property>
 		<property name="cronExpression">
-			<value>0/5 * * * * ?</value>
+			<value>0/17 * * * * ?</value>
 		</property>
 	</bean>
+	
+	<bean id="jobDetail2"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="jobs"></property>
+		<property name="targetMethod" value="searchIndexJob" />
+	</bean>
+	<bean id="trigger2"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="jobDetail2"></property>
+		<property name="cronExpression">
+			<value>0/30 * * * * ?</value>
+		</property>
+	</bean>
+	
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
 				<ref bean="trigger1" />
+				<ref bean="trigger2"/>
 			</list>
 		</property>
 	</bean>

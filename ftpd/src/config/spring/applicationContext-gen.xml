@@ -8,9 +8,4 @@
 						">
 	<bean id="globalHandlerExceptionResolver"
 		class="com.inputabc.ftpd.exception.GlobalHandlerExceptionResolver" />
-	<bean
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/" />
-		<property name="suffix" value=".jsp" />
-	</bean>
 </beans>

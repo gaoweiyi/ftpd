@@ -33,4 +33,17 @@
             diskPersistent="false"
             memoryStoreEvictionPolicy="LRU">
     </cache>
+     <!-- APP缓存 -->
+    <cache
+    		name="app"
+            maxElementsInMemory="1000"
+            eternal="true"
+            timeToIdleSeconds="0"
+            timeToLiveSeconds="0"
+            maxElementsOnDisk="5000"
+            diskExpiryThreadIntervalSeconds="120"
+            overflowToDisk="true"
+            diskPersistent="false"
+            memoryStoreEvictionPolicy="LRU">
+    </cache>
 </ehcache>

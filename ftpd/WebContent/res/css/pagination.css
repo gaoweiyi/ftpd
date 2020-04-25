@@ -1,8 +1,13 @@
-.page-list .pagination {float:left;}
-.page-list .pagination span {cursor: pointer;}
-.page-list .pagination .separate span{cursor: default; border-top:none;border-bottom:none;}
-.page-list .pagination .separate span:hover {background: none;}
-.page-list .page-total {float:left; margin: 25px 20px;}
-.page-list .page-total input, .page-list .page-total select{height: 26px; border: 1px solid #ddd;}
-.page-list .page-total input {width: 40px; padding-left:3px;}
-.page-list .page-total select {width: 50px;}
+.spage-total{display: inline-block;margin-right: 20px;line-height: 35px;color: #666;font-size:14px;}
+.spage-number{display: inline-block;color: #666;font-size:14px;}
+.spage-number button{position: relative;box-sizing: border-box;display: inline-block;margin-left:-1px;padding: 0px 14px;line-height: 33px;border:1px solid #ddd;text-align: center;transition: all .2s;cursor: pointer;outline: none;background: none;user-select: none;color: #666}
+.spage-number button.active{background: #FF9400;color: #fff;border-color:#FF9400;z-index: 3;}
+.spage-number button.active:hover{background: #FF9400;color: #fff;border-color:#FF9400;z-index: 3;}
+.spage-number button:hover{background-color: #eee;}
+.spage-number button.button-disabled{cursor: not-allowed;color: #ccc;}
+.spage-number .spage-after,.spage-before{padding:0px;width: 40px}
+.spage-skip{display: inline-block;margin-left: 20px;line-height: 35px;color: #666;font-size:14px;}
+.spage-skip input{box-sizing: border-box;display: inline-block;width: 45px;height: 35px;text-align: center;vertical-align: top;border:1px solid #ddd;background: none;outline: none;transition: all .2s;}
+.spage-skip input:focus{border-color: #FF9400;}
+.spage-skip button{display: inline-block;padding: 0px 14px;line-height: 33px;vertical-align: top;color: #666;border:1px solid #ddd;cursor: pointer;transition: all .2s;outline: none;background: none;user-select: none;}
+.spage-skip button:hover{background: #FF9400;color: #fff;border:1px solid #FF9400;}

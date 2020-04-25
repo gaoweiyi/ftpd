@@ -36,5 +36,6 @@ public class AppInitializer implements ServletContextListener {
 			ce.printStackTrace();
 		}
 		C.configCache = cm.getCache("config");
+		C.appCache = cm.getCache("app");
 	}
 }

@@ -1,8 +1,6 @@
 package com.inputabc.ftpd.web.controller;
 
 import java.io.BufferedInputStream;
-
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,12 +9,17 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,14 +29,18 @@ import org.springframework.web.servlet.ModelAndView;
 import com.inputabc.ftpd.constant.C;
 import com.inputabc.ftpd.entity.FNode;
 import com.inputabc.ftpd.service.FNodeService;
-
+/**
+ * 
+ * @author gaoweiyi
+ *
+ */
 @Controller
 @RequestMapping("fnodeController.do")
 public class FNodeController {
 	@Autowired
 	private FNodeService fnodeService;
 	@RequestMapping(params = "openDir")
-	public ModelAndView openDir(HttpServletRequest request,HttpServletResponse response,String path){
+	public ModelAndView openDir(HttpServletRequest request,HttpServletResponse response,HttpSession session,String path,boolean isSearched){
 		try {
 			path = URLDecoder.decode(path, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -53,16 +60,48 @@ public class FNodeController {
 		if(path.startsWith("/")==false){
 			path = "/".concat(path);
 		}
+		if(isSearched){
+			session.setAttribute("searchedDir", path);
+		}
 		modelMap.addAttribute("mainPath", path);
 		modelMap.addAttribute("basePath", basePath);
 		mv.setViewName("index");
 		return mv;
 	}
 	@RequestMapping(params = "backDir")
-	public ModelAndView backDir(HttpServletRequest request,HttpServletResponse response,String currentPath){
+	public ModelAndView backDir(HttpServletRequest request,HttpServletResponse response,HttpSession session,String currentPath){
 		String basePath = C.configCache.get("basePath").getObjectValue().toString();
 		ModelAndView mv = new ModelAndView();
 		ModelMap modelMap = mv.getModelMap();
+		String searchedDir = (String) session.getAttribute("searchedDir");
+		if(StringUtils.isNotBlank(searchedDir)){
+			File searchedDirObj = new File(basePath,searchedDir);
+			File currentPathObj = new File(basePath,currentPath);
+			if(searchedDirObj.equals(currentPathObj)){
+				Map<String,Object> searchParams = (Map<String, Object>) session.getAttribute("searchParams");
+				String forwardUri = "fnodeSearchController.do?search";
+				Set<Entry<String, Object>> entrySet = searchParams.entrySet();
+				for (Entry<String, Object> entry : entrySet) {
+					forwardUri+=("&"+entry.getKey()+"="+entry.getValue());
+					if("sortMethod".equals(entry.getKey())){
+						int sortMethod = (int) entry.getValue();
+						if(sortMethod==1){
+							session.setAttribute("sortByNameFlag", !(Boolean)session.getAttribute("sortByNameFlag"));
+						}else if(sortMethod==2){
+							session.setAttribute("sortByModifiedFlag", !(Boolean)session.getAttribute("sortByModifiedFlag"));
+						}else if(sortMethod==3){
+							session.setAttribute("sortByTypeFlag", !(Boolean)session.getAttribute("sortByTypeFlag"));
+						}else if(sortMethod==4){
+							session.setAttribute("sortBySizeFlag", !(Boolean)session.getAttribute("sortBySizeFlag"));
+						}
+					}
+				}
+				
+				mv.setViewName("forward:/"+forwardUri);//重新进行之前的搜索过程，回到用户搜索的结果页
+				return mv;
+			}
+		}
+		/////////////////////////////////////////////
 		//为了保证程序的稳定性
 		if(new File(basePath).toString().equals(new File(basePath,currentPath).toString())==false){
 			String[] split = new File(basePath,currentPath).getParent().replace("\\", "/").split(basePath);
@@ -89,6 +128,7 @@ public class FNodeController {
 			modelMap.addAttribute("fnodes", fnodeService.listFiles(basePath.replace("\\", "/"),currentPath.replace("\\", "/"),0,request.getSession()));
 			modelMap.addAttribute("mainPath", currentPath);
 		}
+	
 		mv.setViewName("index");
 		return mv;
 	}
