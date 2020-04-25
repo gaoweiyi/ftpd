@@ -1,5 +1,9 @@
 package com.inputabc.ftpd.exception;
-
+/**
+ * 
+ * @author gaoweiyi
+ *
+ */
 public class MyException extends Exception {
 
 	/**
