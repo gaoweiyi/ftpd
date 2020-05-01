@@ -1,0 +1,166 @@
+<#include 'settings.html'/>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>" ${content } " - 的搜索结果</title>
+<!-- <link rel="stylesheet" href="res/css/w3.css"> -->
+<link href="https://lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="res/css/style.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="res/css/pagination.css">
+<script type="text/javascript" src="res/js/jquery-1.11.0.min.js"></script>
+
+<script src="res/js/pagination.js"></script>
+</head>
+<body>
+
+	<div id="container">
+		<div id="header">
+			<#include 'search_div.html'>
+			<div id="title_div">
+				
+				<h1 id="title" style="margin-left:1px">共<span style='color:#F18D00'>${fnodePage.totalCount?c}</span>条搜索结果</h1>
+				<script type="text/javascript">
+					var title = $("#title").text();
+					var path = title.substring("Index of ".length);
+					var singlePathArr = path.split("/");
+					var newPathDisplay = "";//显示到标题上的路径html代码，是一些超链接
+					var currentSinglePath = "";
+					var currentSinglePathHtml;
+					if(singlePathArr[1].length!=0){//Windows系统下打开
+						$.each(singlePathArr,function(index,ele){
+							if(index==0)
+								return;
+							currentSinglePath+="/"+ele;
+							currentSinglePathHtml = "<a href='fnodeController.do?openDir&path="+encodeURIComponent(currentSinglePath.substring(1))+"' style='text-decoration:none'>"+"/"+ele+"</a>";
+							newPathDisplay+=currentSinglePathHtml;
+						})
+						$("#title").html("Index of "+newPathDisplay);
+					}//Windows系统下打开
+				</script>
+			</div>
+		</div>
+		<div id="table_div">
+			<table >
+				<tr>
+					<th><a href="fnodeSearchController.do?search&content=${content}&page=${page?c}&pageSize=${pageSize?c}&sortMethod=1">名称</a>&nbsp;&nbsp;</th>
+					<th><a href="fnodeSearchController.do?search&content=${content}&page=${page?c}&pageSize=${pageSize?c}&sortMethod=2">修改日期</a>&nbsp;&nbsp;</th>
+					<th><a href="fnodeSearchController.do?search&content=${content}&page=${page?c}&pageSize=${pageSize?c}&sortMethod=3">类型</a>&nbsp;&nbsp;</th>
+					<th><a href="fnodeSearchController.do?search&content=${content}&page=${page?c}&pageSize=${pageSize?c}&sortMethod=4">大小</a>&nbsp;&nbsp;</th>
+				</tr>
+				<tr>                         
+					<th colspan="4"><hr></th>
+				</tr>
+				<tr>
+					<td colspan="4">
+						<img src="res/img/icon/home2.png"/>
+						<a href="index.html">返回首页</a>
+					</td>
+				</tr>
+				
+				<#list fnodePage.data as fnode>
+					<#assign mainPathEncoded=fnode.mainPath?url>
+					<tr>
+						<td>
+							<img src="res/img/icon/${fnode.imageName }.gif">
+							<#if fnode.type==1>
+								<a href="fnodeController.do?openDir&path=${mainPathEncoded}&isSearched=true">${fnode.name}/</a>
+							<#else>
+								<a id="${fnode.name }" href="javascript:;" name="dlFileLink" onclick="dlFile('${mainPathEncoded }')">${fnode.name }</a>
+								<script type="text/javascript">
+									$("#container [id='${fnode.name}']").attr('href',"fnodeController.do?dlFile&path="+'${mainPathEncoded }'.replace("+","%2B"));;
+								</script>
+							</#if>
+							&nbsp;&nbsp;
+						</td>
+						<td>
+							${fnode.modified }
+							&nbsp;&nbsp;
+						</td>
+						<td>
+							<#if fnode.type==1>
+								文件夹
+							<#elseif (!fnode.ex??) || fnode.ex==''>
+								文件
+							<#else>
+								${fnode.ex }&nbsp;文件
+							</#if>
+							&nbsp;&nbsp;
+						</td>
+						<td>
+							<#if fnode.type==1>
+								-
+							<#else>
+								${fnode.displaySize }
+							</#if>
+						</td>
+					</tr>
+				</#list>
+				<tr>
+					<td colspan="4">
+						<br>
+						<div id="myPage"></div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="4"><hr></td>
+				</tr>
+			</table>
+		</div>
+		<div id="footer">
+			<address>Your ip is ${remoteHost }</address>
+		</div>
+	</div>
+	<div>
+     <button onclick="returnTop()" id="btnTop" title="返回顶部"><i class="fa fa-chevron-up"></i></button>
+	 </div>
+	<script type="text/javascript">
+		var basePath = "${basePath!''}";
+		$("#myPage").sPage({
+		    page:${page?c},
+		    total:${fnodePage.totalCount?c},
+		    pageSize:${pageSize?c},
+		    showTotal:false,
+		    totalTxt:'',
+		    showSkip:false,
+		    showPN:true,
+		   prevPage:"上一页",
+		    nextPage:"下一页",
+		   backFun:function(page){
+			   location.href = "fnodeSearchController.do?search&content=${content}&page="+page+"&pageSize=${pageSize?c}";
+		    }
+		});
+		function dlFile(mainPath){
+			location.href = "fnodeController.do?dlFile&path="+mainPath.replace("+","%2B");
+		}
+		 window.onscroll = function() {
+		      scrollFunction();
+		  };
+		   
+		  function scrollFunction() {
+		      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+		         document.getElementById("btnTop").style.display = "block";
+		     } else {
+		        document.getElementById("btnTop").style.display = "none";
+		    }
+		}
+		  
+		 function returnTop() {
+ 			 var newtop;
+ 			 var timer=setInterval(function(){
+ 			      newtop = $(document).scrollTop();
+ 			      if($(document).scrollTop()==0){
+ 			        clearInterval(timer);
+ 			      }else{
+ 			        var a =$(document).scrollTop(newtop -60);
+ 			      }
+ 			    },2);
+		 }
+
+	</script>
+</body>
+</html>

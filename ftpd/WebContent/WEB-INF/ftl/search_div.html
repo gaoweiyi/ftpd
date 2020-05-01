@@ -1,0 +1,152 @@
+
+<style>
+	#search_div{
+		margin:0px auto;
+		width:430px;
+		height:30px;
+		position:relative;
+		bottom:5px;
+		top:5px;
+	}
+ 	#search_parent_div{
+ 		position:fixed; 
+		left:0px; 
+		top:0px;
+		width:100%;
+		height:45px;
+		opacity: 1;
+		z-index:90;
+		background-color: #ffffff;
+ 	}
+	#search_input{
+		width:402px;
+		height:28px;
+		border:0px;
+		margin-left:5px;
+		
+	}
+	#search_btn:active{
+		color:#F18D00;
+	}
+	input{
+		outline:none
+	} 
+	.showBottomLine{
+		border-bottom:solid 0px #ccc;
+		box-shadow:0 0 6px 0 #ccc;
+		-webkit-box-shadow:0 0 6px 0 #ccc;
+		-moz-box-shadow:0 0 6px 0 #ccc;
+	}
+	.showFullBorder2 { 
+	    border: 1px solid #aaa; 
+	} 
+	.showFullBorder { 
+	   box-shadow:0 0 6px 0 #aaa;
+		-webkit-box-shadow:0 0 6px 0 #aaa;
+		-moz-box-shadow:0 0 6px 0 #aaa;
+	} 
+ 	.showBottomBorder{
+ 		border-bottom:1px solid #aaa;
+ 	}
+</style>
+<div id="search_parent_div">
+	<div id="search_div" unselectable="on" onselectstart="return false;" style="-moz-user-select:none;">
+		<input type="text" id="search_input" value="${content!''}"><i class="fa fa-search" style="font-size:18px" id="search_btn"></i>
+		<script>
+		    var $search_div = $("#search_div");
+		    var $search_parent_div = $("#search_parent_div");
+		    var $search_btn = $("#search_btn");
+		    var $search_input = $("#search_input");
+		    if($search_input.val()){
+		    	$search_div.addClass("showBottomBorder");
+		    }
+		    
+		    
+		    $search_btn.click(function(){
+				var search_text = $search_input.val();
+				if(search_text==false || /^\s+$/.test(search_text)){
+					$search_input.attr("placeholder","请输入文件名");
+				}else{
+					location.href = "fnodeSearchController.do?search&content="+search_text;
+				}
+			});
+		    
+		    $search_input.keypress(function(e){
+				if(e.keyCode==13){
+					$search_btn.click();
+				}
+			});
+		    $search_input.bind("input propertychange",function(){
+		    	if(this.value.length>30){
+		    		this.value = this.value.substring(0,30);
+		    	}
+		    });
+		    $search_input.bind({
+				focus:function(){
+					this.placeholder = "";
+					$search_div.addClass("showBottomBorder");
+				},
+				blur:function(){
+					$search_div.removeClass("showBottomBorder");
+				}
+			});
+		    var currentTop = 0;
+		    var oldTop = 0;
+		    $(window).scroll(function(){
+		    	$search_input.unbind("focus");
+    			$search_input.unbind("blur");
+		    	currentTop = $(window).scrollTop();
+		    	$search_input.attr("placeholder","");
+		    	if(currentTop>=oldTop){
+		    		if(currentTop>29){
+		    			if($search_div.hasClass("showBottomBorder")){
+		    				$search_div.removeClass("showBottomBorder");
+		    				$search_div.addClass("showFullBorder2");
+		    			}
+		    			$search_input.unbind("focus");
+		    			$search_input.unbind("blur");
+		    			$search_input.bind({
+		    				focus:function(){
+		    					this.placeholder = "";
+		    					$search_div.removeClass("showBottomBorder");
+		    					$search_div.addClass("showFullBorder2");
+		    				},
+		    				blur:function(){
+		    					$search_div.removeClass("showFullBorder2");
+		    					$search_div.removeClass("showBottomBorder");
+		    				}
+		    			});
+		    		}
+		    		if(currentTop>78){
+		    			$search_parent_div.addClass("showBottomLine");
+		    		}
+		    	}else{
+		    		if(currentTop<=29){
+		    			$search_input.attr("placeholder","");
+		    			if($search_div.hasClass("showFullBorder2")){
+		    				$search_div.removeClass("showFullBorder2");
+		    				$search_div.addClass("showBottomBorder");
+		    			}
+		    			$search_input.unbind("focus");
+		    			$search_input.unbind("blur");
+		    			$search_input.bind({
+		    				focus:function(){
+		    					this.placeholder = "";
+		    					$search_div.removeClass("showFullBorder2");
+		    					$search_div.addClass("showBottomBorder");
+		    				},
+		    				blur:function(){
+		    					$search_div.removeClass("showFullBorder2");
+		    					$search_div.removeClass("showBottomBorder");
+		    				}
+		    			});
+		    		}
+		    		if(currentTop<=78){
+		    			$search_parent_div.removeClass("showBottomLine");
+		    		}
+		    	}
+		    	oldTop = currentTop;
+		    });
+		</script>
+	</div>
+</div>

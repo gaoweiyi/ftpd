@@ -16,7 +16,7 @@
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="jobDetail1"></property>
 		<property name="cronExpression">
-			<value>0/17 * * * * ?</value>
+			<value>0/6 * * * * ?</value>
 		</property>
 	</bean>
 	
@@ -29,7 +29,7 @@
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="jobDetail2"></property>
 		<property name="cronExpression">
-			<value>0/30 * * * * ?</value>
+			<value>0/57 * * * * ?</value>
 		</property>
 	</bean>
 	
