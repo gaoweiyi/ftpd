@@ -58,9 +58,12 @@ public class LuceneUtils {
 		String noExFilename = PFileUtils.getMainName(filename, ex);
 		bw.write(noExFilename);// 写入一个文件名到扩展字典ext.dic，将来可以根据这个文件名搜索到这个文件
 		bw.newLine();
+		bw.write(ex);// 写入一个文件扩展名到扩展字典ext.dic，将来可以根据这个扩展名搜索到这个文件
+		bw.newLine();
 		bw.flush();
+		
 		Document doc = new Document();
-		doc.add(new TextField("filename", noExFilename, Store.NO));
+		doc.add(new TextField("filename", filename, Store.YES));
 		doc.add(new StringField("ex", ex, Store.NO));
 		doc.add(new StoredField("path", path));
 		indexWriter.addDocument(doc);

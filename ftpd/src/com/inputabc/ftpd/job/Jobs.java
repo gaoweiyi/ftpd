@@ -65,7 +65,7 @@ public class Jobs {
 		}
 		String basePath = p.getProperty("basePath");
 		if (StringUtils.isBlank(basePath)) {
-			throw new RuntimeException("未指定一个默认的列表目录，请修改你的basePath参数！");
+			basePath = "/";
 		}else{
 			basePath = basePath.replace("\\", "/");
 		}
@@ -75,7 +75,7 @@ public class Jobs {
 		}
 		String autoMimeType = p.getProperty("autoMimeType");
 		if (StringUtils.isBlank(autoMimeType)) {
-			autoMimeType = "false";
+			autoMimeType = "true";
 		}
 		String indexPath = p.getProperty("indexPath");
 		if (StringUtils.isBlank(indexPath)) {
@@ -88,6 +88,34 @@ public class Jobs {
 		if (StringUtils.isBlank(dateFormat)) {
 			dateFormat = "yyyy/MM/dd HH:mm";
 		}
+		String enableHighlight = p.getProperty("enableHighlight");
+		if(StringUtils.isBlank(enableHighlight)){
+			enableHighlight = "true";
+		}
+		String highlightColor = p.getProperty("highlightColor");
+		if(StringUtils.isBlank(highlightColor)){
+			highlightColor = "#FF9400";
+		}
+		String enableRequestSecurityProtection = p.getProperty("enableRequestSecurityProtection");
+		if(StringUtils.isBlank(enableRequestSecurityProtection)){
+			enableRequestSecurityProtection = "true";
+		}
+		String requestIntervalMilliseconds = p.getProperty("requestIntervalMilliseconds");
+		if(StringUtils.isBlank(requestIntervalMilliseconds)){
+			requestIntervalMilliseconds = "1000";
+		}
+		String requestContinuousCount = p.getProperty("requestContinuousCount");
+		if(StringUtils.isBlank(requestContinuousCount)){
+			requestContinuousCount = "150";
+		}
+		String ipBlockMinute = p.getProperty("ipBlockMinute");
+		if(StringUtils.isBlank(ipBlockMinute)){
+			ipBlockMinute = "15";
+		}
+		String maxWarningNumber = p.getProperty("maxWarningNumber");
+		if(StringUtils.isBlank(maxWarningNumber)){
+			maxWarningNumber = "2";
+		}
 		Cache configcache = C.configCache;
 		if (configcache == null) {
 			new AppInitializer().contextInitialized(null);
@@ -97,6 +125,13 @@ public class Jobs {
 		configcache.put(new Element("autoMimeType", autoMimeType));
 		configcache.put(new Element("indexPath", indexPath));
 		configcache.put(new Element("dateFormat", dateFormat));
+		configcache.put(new Element("enableHighlight", enableHighlight));
+		configcache.put(new Element("highlightColor", highlightColor));
+		configcache.put(new Element("enableRequestSecurityProtection", enableRequestSecurityProtection));
+		configcache.put(new Element("requestIntervalMilliseconds", requestIntervalMilliseconds));
+		configcache.put(new Element("requestContinuousCount", requestContinuousCount));
+		configcache.put(new Element("ipBlockMinute", ipBlockMinute));
+		configcache.put(new Element("maxWarningNumber", maxWarningNumber));
 	}
 
 	/**

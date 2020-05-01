@@ -15,12 +15,13 @@
 <script type="text/javascript" src="res/js/jquery-1.11.0.min.js"></script>
 
 <script src="res/js/pagination.js"></script>
+
 </head>
 <body>
 
 	<div id="container">
 		<div id="header">
-			<#include 'search_div.html'>
+<!-- 			<#include 'search_div.html'> -->
 			<div id="title_div">
 				
 				<h1 id="title" style="margin-left:1px">共<span style='color:#F18D00'>${fnodePage.totalCount?c}</span>条搜索结果</h1>
@@ -115,9 +116,7 @@
 			<address>Your ip is ${remoteHost }</address>
 		</div>
 	</div>
-	<div>
-     <button onclick="returnTop()" id="btnTop" title="返回顶部"><i class="fa fa-chevron-up"></i></button>
-	 </div>
+	<#include 'btn_group_div.html'/>
 	<script type="text/javascript">
 		var basePath = "${basePath!''}";
 		$("#myPage").sPage({
@@ -137,30 +136,7 @@
 		function dlFile(mainPath){
 			location.href = "fnodeController.do?dlFile&path="+mainPath.replace("+","%2B");
 		}
-		 window.onscroll = function() {
-		      scrollFunction();
-		  };
-		   
-		  function scrollFunction() {
-		      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-		         document.getElementById("btnTop").style.display = "block";
-		     } else {
-		        document.getElementById("btnTop").style.display = "none";
-		    }
-		}
-		  
-		 function returnTop() {
- 			 var newtop;
- 			 var timer=setInterval(function(){
- 			      newtop = $(document).scrollTop();
- 			      if($(document).scrollTop()==0){
- 			        clearInterval(timer);
- 			      }else{
- 			        var a =$(document).scrollTop(newtop -60);
- 			      }
- 			    },2);
-		 }
-
+		
 	</script>
 </body>
 </html>

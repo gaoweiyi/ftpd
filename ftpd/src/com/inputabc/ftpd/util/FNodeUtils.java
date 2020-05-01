@@ -31,11 +31,17 @@ public class FNodeUtils {
 	 * 将File对象封装为FNode对象
 	 * @param basePath
 	 * @param file
+	 * @param dateFormat
+	 * @param filename
 	 * @return
 	 */
-	public static FNode pack(String basePath,File file,String dateFormat){
+	public static FNode pack(String basePath,File file,String dateFormat,String filename){
 		FNode fnode = new FNode();
-		fnode.setName(file.getName());
+		if(filename==null){
+			fnode.setName(file.getName());
+		}else{
+			fnode.setName(filename);
+		}
 		fnode.setModified(new SimpleDateFormat(dateFormat).format(new Date(file.lastModified())));
 		if(file.toString().replace("\\", "/").split(basePath).length==0){//如果搜索出的文件是basePath本身
 			fnode.setMainPath(file.toString());
@@ -100,7 +106,7 @@ public class FNodeUtils {
 		if("mp3".equalsIgnoreCase(ex)||"mp2".equalsIgnoreCase(ex)||"wma".equalsIgnoreCase(ex)||
 				"wv".equalsIgnoreCase(ex)||"aac".equalsIgnoreCase(ex)||"m4a".equalsIgnoreCase(ex)||
 				"tts".equalsIgnoreCase(ex)||"flac".equalsIgnoreCase(ex)||"ape".equalsIgnoreCase(ex)||
-				"aiff".equalsIgnoreCase(ex)||"ogg".equalsIgnoreCase(ex)){
+				"aiff".equalsIgnoreCase(ex)||"ogg".equalsIgnoreCase(ex)||"wav".equalsIgnoreCase(ex)){
 			return "sound2";
 		}
 		if("tar".equalsIgnoreCase(ex)||"zip".equalsIgnoreCase(ex)||"rar".equalsIgnoreCase(ex)||"7z".equalsIgnoreCase(ex)||

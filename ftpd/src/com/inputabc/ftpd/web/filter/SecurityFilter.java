@@ -38,13 +38,17 @@ public class SecurityFilter implements Filter {
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		// 进行安全验证，防止恶意攻击（目前仅针对fnodeSearchController的search的请求）
+		// 进行安全验证，防止恶意攻击
 		request.setAttribute("remoteHost", request.getRemoteHost());
-		boolean isSearchHandler = ((HttpServletRequest)request).getParameterMap().containsKey("search") && ((HttpServletRequest)request).getRequestURI().contains("fnodeSearchController");
-		if(isSearchHandler==false){
+		boolean enableRequestSecurityProtection = Boolean.parseBoolean( (String)C.configCache.get("enableRequestSecurityProtection").getObjectValue());
+		if(enableRequestSecurityProtection==false){
 			chain.doFilter(request, response);
 			return;
 		}
+		long requestIntervalMilliseconds = Long.parseLong((String)C.configCache.get("requestIntervalMilliseconds").getObjectValue());
+		long requestContinuousCount = Long.parseLong((String)C.configCache.get("requestContinuousCount").getObjectValue());
+		long ipBlockMinute = Long.parseLong((String)C.configCache.get("ipBlockMinute").getObjectValue());
+		long maxWarningNumber = Long.parseLong((String)C.configCache.get("maxWarningNumber").getObjectValue());
 		response.setContentType("text/html;charset=utf-8");
 		String remoteHost = request.getRemoteHost();
 		//验证此ip是否在黑名单里
@@ -57,8 +61,6 @@ public class SecurityFilter implements Filter {
 			e1.printStackTrace();
 			throw new RuntimeException(e1);
 		}
-		
-		
 		Element element = C.appCache.get("requestHostMap");
 		if (element == null) {
 			C.appCache.put(new Element("requestHostMap", new HashMap<String, User>()));
@@ -69,25 +71,25 @@ public class SecurityFilter implements Filter {
 			User user = requestHostMap.get(remoteHost);
 			long lastAccessTime = user.getLastAccessTime();// 最后访问时间
 			if(user.isWaitingActivation()){
-				if((System.currentTimeMillis()-lastAccessTime)>1000*60*15){
+				if((System.currentTimeMillis()-lastAccessTime)>1000*60*ipBlockMinute){
 					user.setWaitingActivation(false);//解除锁定状态
 				}else{
-					response.getWriter().write("用户锁定中。请"+(1000*60*15-((System.currentTimeMillis()-lastAccessTime)))/1000/60+"分钟后再次尝试！");
+					response.getWriter().write("用户锁定中。请"+(1000*60*ipBlockMinute-((System.currentTimeMillis()-lastAccessTime)))/1000/60+"分钟后再次尝试！");
 					return;
 				}
 			}
 			int continuousAccessCount = user.getContinuousAccessCount();// 连续访问次数
 			
-			if ((System.currentTimeMillis() - lastAccessTime) > 3000) {
+			if ((System.currentTimeMillis() - lastAccessTime) > requestIntervalMilliseconds) {
 				user.setContinuousAccessCount(user.getContinuousAccessCount()/2);
 				user.setLastAccessTime(System.currentTimeMillis());
 			} else {
 				user.setLastAccessTime(System.currentTimeMillis());
 				user.setContinuousAccessCount(++continuousAccessCount);
-				if (continuousAccessCount > 10) {// 如果连续访问超过10次
+				if (continuousAccessCount > requestContinuousCount) {// 如果连续访问超过requestContinuousCount次
 					user.setWaitingActivation(true);
 					user.setIllegalCount(user.getIllegalCount()+1);
-					if(user.getIllegalCount()>2){
+					if(user.getIllegalCount()>maxWarningNumber){
 						//将用户的ip记录到黑名单
 						try {
 							addToBlackList(user.getHost());
@@ -96,7 +98,7 @@ public class SecurityFilter implements Filter {
 							e.printStackTrace();
 						}
 					}else{
-						response.getWriter().write("用户锁定中。请15分钟后再次尝试！");
+						response.getWriter().write("用户锁定中。请"+ipBlockMinute+"分钟后再次尝试！");
 					}
 					return;
 				}

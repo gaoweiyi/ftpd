@@ -80,4 +80,8 @@ public class FNodeSearchController {
 		mv.setViewName("searchresu");
 		return mv;
 	}
+	@RequestMapping(params="toSearchPage")
+	public ModelAndView toSearchPage(){
+		return new ModelAndView("search");
+	}
 }

@@ -25,7 +25,7 @@ public class FNodeServiceImpl implements FNodeService {
 		File[] listFiles = new File(basePath.replace("\\", "/"),mainPath.replace("\\","/")).listFiles();
 		try {
 			for (File file : listFiles) {
-				fnodes.add(FNodeUtils.pack(basePath, file,dateFormat));
+				fnodes.add(FNodeUtils.pack(basePath, file,dateFormat,null));
 			}
 		} catch (NullPointerException e) {
 		}
