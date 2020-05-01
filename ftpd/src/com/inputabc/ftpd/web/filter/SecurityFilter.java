@@ -49,11 +49,12 @@ public class SecurityFilter implements Filter {
 		long requestContinuousCount = Long.parseLong((String)C.configCache.get("requestContinuousCount").getObjectValue());
 		long ipBlockMinute = Long.parseLong((String)C.configCache.get("ipBlockMinute").getObjectValue());
 		long maxWarningNumber = Long.parseLong((String)C.configCache.get("maxWarningNumber").getObjectValue());
-		response.setContentType("text/html;charset=utf-8");
+		
 		String remoteHost = request.getRemoteHost();
 		//验证此ip是否在黑名单里
 		try {
 			if(getBlackList().contains(remoteHost)){
+				response.setContentType("text/html;charset=utf-8");
 				response.getWriter().write("Bad Request !");
 				return;
 			}
@@ -74,6 +75,7 @@ public class SecurityFilter implements Filter {
 				if((System.currentTimeMillis()-lastAccessTime)>1000*60*ipBlockMinute){
 					user.setWaitingActivation(false);//解除锁定状态
 				}else{
+					response.setContentType("text/html;charset=utf-8");
 					response.getWriter().write("用户锁定中。请"+(1000*60*ipBlockMinute-((System.currentTimeMillis()-lastAccessTime)))/1000/60+"分钟后再次尝试！");
 					return;
 				}
@@ -93,11 +95,13 @@ public class SecurityFilter implements Filter {
 						//将用户的ip记录到黑名单
 						try {
 							addToBlackList(user.getHost());
+							response.setContentType("text/html;charset=utf-8");
 							response.getWriter().write("Bad Request !");
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}else{
+						response.setContentType("text/html;charset=utf-8");
 						response.getWriter().write("用户锁定中。请"+ipBlockMinute+"分钟后再次尝试！");
 					}
 					return;
