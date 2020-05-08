@@ -9,11 +9,9 @@
 直接将war文件放到tomcat服务器里运行。<br>
 如果无法运行，可能你的服务器没有安装jdk。<br>
 #### ftpd的全局首选项在config.properties文件中，需要对网站进行自定义配置请查看并修改这个文件
-<br>
 用之前请先修改WEB-INF/classes/config/config.properties里的basePath属性，修改为你自己要展示文件列表的根目录，必须为绝对路径<br>
 如果你的basePath里的文件比较少，建议将索引更新频率设的高一点，不然可能前几次访问该网站无法搜索文件。例如改为每20秒更新一次，可以设为0/20 * * * * ?，在spring目录下的applicationContext-quartz.xml里设置<br>
-
-<br><br>
+<br>
 更新日志：<br>
 v2.2.1<br>
 改进了搜索功能的体验<br>
