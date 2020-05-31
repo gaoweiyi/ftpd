@@ -35,6 +35,7 @@ public class FNodeSearchServiceImpl implements FNodeSearchService {
 		FNodePage fNodePage = fnsd.search(content, page, pageSize);
 		List<FNode> fnodes = fNodePage.getData();
 		System.out.println(page);
+		System.out.println(pageSize);
 //		int ideal = 0;// 理想结果数
 //		for (FNode fnode : fnodes) {
 //			if (fnode.getName().contains(content)) {
