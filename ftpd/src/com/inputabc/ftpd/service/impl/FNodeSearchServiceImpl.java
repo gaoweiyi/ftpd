@@ -34,6 +34,7 @@ public class FNodeSearchServiceImpl implements FNodeSearchService {
 			throws Exception {
 		FNodePage fNodePage = fnsd.search(content, page, pageSize);
 		List<FNode> fnodes = fNodePage.getData();
+		System.out.println("12点07分");
 //		int ideal = 0;// 理想结果数
 //		for (FNode fnode : fnodes) {
 //			if (fnode.getName().contains(content)) {
