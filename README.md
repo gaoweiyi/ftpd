@@ -6,7 +6,7 @@
 <a href='http://ftpd.inputabc.com:8080'> ftpd.inputabc.com </a>
 <br><br>
 使用说明：<br>
-直接将war文件放到tomcat服务器里运行（仅2.x版本）。<br>
+直接将war文件放到tomcat服务器里运行（仅2.x版本需要，3.x版本直接运行即可）。<br>
 如果无法运行，可能你的服务器没有安装jdk。<br>
 > ftpd的全局首选项在config.properties文件中，需要对网站进行自定义配置请查看并修改这个文件
 
