@@ -3,7 +3,7 @@
 可以展示服务器中某个目录下的文件列表（类似于虚拟主机的那种，但界面更友好）。点击文件可以下载，可以复制文件地址用于分享该文件。可以快速的搜索文件。
 <br><br>
 效果展示网站：<br>
-<a href='http://ftpd.inputabc.com:8080'> ftpd.inputabc.com </a>
+<a href='http://inputabc.com/ftpd'> ftpd.inputabc.com </a>
 <br><br>
 使用说明：<br>
 直接将war文件放到tomcat服务器里运行（仅2.x版本需要，3.x版本直接运行即可）。<br>
